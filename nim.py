@@ -23,8 +23,10 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :returns: nombre d'allumettes à prendre.
     :rtype: int.
     """
-    # À implémenter.
-    pass
+    
+    if nombre_allumettes <= 3:
+        return (nombre_allumettes - 1) * gagnant_dernier + 1 + (not gagnant_dernier)
+    else
 
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
