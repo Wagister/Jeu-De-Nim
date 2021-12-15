@@ -1,7 +1,5 @@
 #! /usr/bin/env python3
 
-#Test
-
 def afficher_jeu(nombre_allumettes):
     """Affiche le plateau du jeu.
 
