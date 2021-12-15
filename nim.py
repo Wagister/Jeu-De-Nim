@@ -6,8 +6,8 @@ def afficher_jeu(nombre_allumettes):
     :param nombre_allumettes: doit être positif ou nul.
     :type nombre_allumettes: int.
     """
-    # À implémenter.
-    pass
+    
+    return "|" * nombre_allumettes
 
 
 def prise_ia(nombre_allumettes, gagnant_dernier):
@@ -46,14 +46,14 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
 
 def afficher_message_bienvenue():
     """Affiche le message de bienvenue."""
-    # À implémenter.
-    pass
+
+    print("Bienvenue sur le jeu de Nim !")
 
 
 def afficher_message_fin():
     """Affiche le message de fin."""
-    # À implémenter.
-    pass
+    
+    print("Votre partie est terminée")
 
 
 def reponse_oui_non(question):
