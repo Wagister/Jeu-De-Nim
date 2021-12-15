@@ -66,8 +66,14 @@ def reponse_oui_non(question):
     :returns: la réponse sous forme de booléen.
     :rtype: bool.
     """
-    # À implémenter.
-    pass
+    
+    reponse = input(question)
+    if str.lower(reponse) == "o":
+        return True
+    elif str.lower(reponse) == "n":
+        return False
+    else:
+        return reponse_oui_non(question)
 
 
 def reponse_entier(question, vmin, vmax):
