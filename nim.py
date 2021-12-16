@@ -24,10 +24,15 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :rtype: int.
     """
     
-    if nombre_allumettes <= 3: #C'est extrement chaotique mais en vrai j'en suis trop fier
-        nombre_prendre = (nombre_allumettes * gagnant_dernier) + (nombre_allumettes - 1) * (not gagnant_dernier)
-        return nombre_prendre + (nombre_prendre == 0)
-
+    if nombre_allumettes <= 4:
+        #La première parenthèse est prise en compte que si gagnant_dernier est True (Donc égale à 1, sinon la parenthèse est multipliée par 0)
+        #Si elle est prise en compte, elle prend toute les allumettes (Donc nombre_allumettes * 1)
+        #La seconde est prise en compte si gagnant_dernier est False (Donc égale à 0 mais inversé grâce au "not")
+        #Si elle est prise en compte elle essayera de laisser 1 allumette (Donc nombre_allumettes - 1)
+        nombre_prendre = (nombre_allumettes * gagnant_dernier) + ((nombre_allumettes - 1) * (not gagnant_dernier)) 
+        
+        #Empêche de retourner 0 ou 4 (Si nombre_prendre == 0 est True alors sa revient à écrire 1, donc 0 + 1. Idem avec nombre_prendre == 4 sauf qu'on soustrait)
+        return nombre_prendre + (nombre_prendre == 0) - (nombre_prendre == 4)
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
     """Une seule partie du jeu de Nim.
