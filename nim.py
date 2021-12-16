@@ -23,10 +23,8 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :returns: nombre d'allumettes à prendre.
     :rtype: int.
     """
-    
-    if nombre_allumettes <= 3: #C'est extrement chaotique mais en vrai j'en suis trop fier
-        nombre_prendre = (nombre_allumettes * gagnant_dernier) + (nombre_allumettes - 1) * (not gagnant_dernier)
-        return nombre_prendre + (nombre_prendre == 0)
+    # À implémenter.
+    pass
 
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
@@ -92,8 +90,17 @@ def reponse_entier(question, vmin, vmax):
     :returns: l'entier choisi.
     :rtype: int.
     """
-    # À implémenter.
-    pass
+    
+    entier = input(question)
+    try:
+        entier = int(entier)
+
+        if entier >= vmin and entier <= vmax:
+            return entier
+        else:
+            return reponse_entier(question, vmin, vmax)
+    except:
+        return reponse_entier(question, vmin, vmax)
 
 
 def jouer():
