@@ -1,14 +1,41 @@
 #! /usr/bin/env python3
 
-def afficher_jeu(nombre_allumettes):
-    """Affiche le plateau du jeu.
+from turtle import *
 
+def afficher_jeu(nombre_allumettes): #C'est assez long et chaotique, ça aurait pu être plus réduit je pense, mais j'ai un peu la flemme de réfléchir.
+    """Affiche le plateau du jeu.
     :param nombre_allumettes: doit être positif ou nul.
     :type nombre_allumettes: int.
     """
-    
-    return "|" * nombre_allumettes
-
+    bgcolor("green")
+    speed("fastest")
+    for i in range(nombre_allumettes):
+        penup()
+        goto(-300+i*12,0)
+        pendown()
+        color("beige")
+        begin_fill()
+        left(180)
+        forward(5)
+        left(90)
+        forward(25)
+        left(90)
+        forward(5)
+        left(90)
+        forward(25)
+        end_fill()
+        color("red")
+        begin_fill()
+        forward(5)
+        left(90)
+        forward(5)
+        left(90)
+        forward(5)
+        left(90)
+        forward(5)
+        end_fill()
+        penup()
+    done()
 
 def prise_ia(nombre_allumettes, gagnant_dernier):
     """Implémentation de la statégie gagnante : donne le nombre
@@ -24,15 +51,10 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :rtype: int.
     """
     
-    if nombre_allumettes <= 4:
-        #La première parenthèse est prise en compte que si gagnant_dernier est True (Donc égale à 1, sinon la parenthèse est multipliée par 0)
-        #Si elle est prise en compte, elle prend toute les allumettes (Donc nombre_allumettes * 1)
-        #La seconde est prise en compte si gagnant_dernier est False (Donc égale à 0 mais inversé grâce au "not")
-        #Si elle est prise en compte elle essayera de laisser 1 allumette (Donc nombre_allumettes - 1)
-        nombre_prendre = (nombre_allumettes * gagnant_dernier) + ((nombre_allumettes - 1) * (not gagnant_dernier)) 
-        
-        #Empêche de retourner 0 ou 4 (Si nombre_prendre == 0 est True alors sa revient à écrire 1, donc 0 + 1. Idem avec nombre_prendre == 4 sauf qu'on soustrait)
-        return nombre_prendre + (nombre_prendre == 0) - (nombre_prendre == 4)
+    if nombre_allumettes <= 3: #C'est extrement chaotique mais en vrai j'en suis trop fier
+        nombre_prendre = (nombre_allumettes * gagnant_dernier) + (nombre_allumettes - 1) * (not gagnant_dernier)
+        return nombre_prendre + (nombre_prendre == 0)
+
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
     """Une seule partie du jeu de Nim.
@@ -54,13 +76,13 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
 def afficher_message_bienvenue():
     """Affiche le message de bienvenue."""
 
-    print("Bienvenue sur le jeu de Nim !")
+    print("Bienvenue sur le jeu de Nim !") #30 secondes à faire
 
 
 def afficher_message_fin():
     """Affiche le message de fin."""
     
-    print("Votre partie est terminée")
+    print("Votre partie est terminée") #30 secondes à faire
 
 
 def reponse_oui_non(question):
