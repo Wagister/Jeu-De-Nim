@@ -2,7 +2,7 @@
 
 from turtle import *
 
-def afficher_jeu(nombre_allumettes): #C'est assez long et chaotique, ça aurait pu être plus réduit je pense, mais j'ai un peu la flemme de réfléchir.
+def afficher_jeu(nombre_allumettes): #C'est assez long et désordonné, ça aurait pu être plus réduit je pense, mais j'ai un peu la flemme de réfléchir.
     """Affiche le plateau du jeu.
     :param nombre_allumettes: doit être positif ou nul.
     :type nombre_allumettes: int.
