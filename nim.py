@@ -1,41 +1,24 @@
 #! /usr/bin/env python3
+from PIL import Image
 
-from turtle import *
-
-def afficher_jeu(nombre_allumettes): #C'est assez long et désordonné, ça aurait pu être plus réduit je pense, mais j'ai un peu la flemme de réfléchir.
+def afficher_jeu(nombre_allumettes, texture):
     """Affiche le plateau du jeu.
+
     :param nombre_allumettes: doit être positif ou nul.
     :type nombre_allumettes: int.
+    :param texture: texture de l'allumette
+    :type texture: image object
     """
-    bgcolor("green")
-    speed("fastest")
+    
+    espacement = 10
+    largeur_texture, hauteur_texture = texture.size
+    largeur_jeu = (largeur_texture + espacement) * nombre_allumettes
+    
+    jeu = Image.new("RGB", (largeur_jeu, hauteur_texture), (255, 255, 255))
     for i in range(nombre_allumettes):
-        penup()
-        goto(-300+i*12,0)
-        pendown()
-        color("beige")
-        begin_fill()
-        left(180)
-        forward(5)
-        left(90)
-        forward(25)
-        left(90)
-        forward(5)
-        left(90)
-        forward(25)
-        end_fill()
-        color("red")
-        begin_fill()
-        forward(5)
-        left(90)
-        forward(5)
-        left(90)
-        forward(5)
-        left(90)
-        forward(5)
-        end_fill()
-        penup()
-    done()
+        jeu.paste(texture, (i * (largeur_texture + espacement), 0))
+    
+    jeu.show()
 
 def prise_ia(nombre_allumettes, gagnant_dernier):
     """Implémentation de la statégie gagnante : donne le nombre
