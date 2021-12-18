@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 from PIL import Image
 
-def afficher_jeu(nombre_allumettes, texture):
+def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.png")):
     """Affiche le plateau du jeu.
 
     :param nombre_allumettes: doit être positif ou nul.
