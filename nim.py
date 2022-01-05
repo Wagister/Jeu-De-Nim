@@ -80,7 +80,7 @@ def afficher_message_fin():
     """Affiche le message de fin."""
     
     print("Votre partie est terminée") #30 secondes à faire
-
+    #Même 30 secondes c'est un peu long pour ca
 
 def reponse_oui_non(question):
     """Pose une question binaire (oui/non) à l'utilisateur qui répond
