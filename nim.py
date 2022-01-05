@@ -1,7 +1,9 @@
 #! /usr/bin/env python3
 from PIL import Image
+from time import sleep
+import turtle
 
-def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.png")):
+def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
     """Affiche le plateau du jeu.
 
     :param nombre_allumettes: doit être positif ou nul.
@@ -17,8 +19,12 @@ def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.png")):
     jeu = Image.new("RGB", (largeur_jeu, hauteur_texture), (255, 255, 255))
     for i in range(nombre_allumettes):
         jeu.paste(texture, (i * (largeur_texture + espacement), 0))
-    
-    jeu.show()
+    jeu = jeu.save("Jeu.gif")
+
+    tr = turtle.Turtle()
+    wn.addshape('Jeu.gif')
+    tr.shape('Jeu.gif')
+
 
 def prise_ia(nombre_allumettes, gagnant_dernier):
     """Implémentation de la statégie gagnante : donne le nombre
@@ -43,6 +49,9 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
         
         #Empêche de retourner 0 ou 4 (Si nombre_prendre == 0 est True alors sa revient à écrire 1, donc 0 + 1. Idem avec nombre_prendre == 4 sauf qu'on soustrait)
         return nombre_prendre + (nombre_prendre == 0) - (nombre_prendre == 4)
+    else:
+        #Insérer du code ici.
+        pass
 
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
@@ -85,7 +94,7 @@ def reponse_oui_non(question):
     :rtype: bool.
     """
     
-    reponse = input(question)
+    reponse = turtle.textinput("Question", question)
     if str.lower(reponse) == "o":
         return True
     elif str.lower(reponse) == "n":
@@ -109,7 +118,7 @@ def reponse_entier(question, vmin, vmax):
     :rtype: int.
     """
     
-    entier = input(question)
+    entier = turtle.textinput("Question", question)
     try:
         entier = int(entier)
 
@@ -142,7 +151,7 @@ def jouer():
 
     afficher_message_fin()
 
-
+    
 if __name__ == "__main__":
     # si le programme est exécuté directement, on lance une partie
     jouer()
