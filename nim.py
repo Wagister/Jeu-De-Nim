@@ -3,6 +3,7 @@ from PIL import Image
 from time import sleep
 import turtle
 
+
 def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
     """Affiche le plateau du jeu.
 
@@ -14,15 +15,15 @@ def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
     
     espacement = 10
     largeur_texture, hauteur_texture = texture.size
-    largeur_jeu = (largeur_texture + espacement) * nombre_allumettes
+    largeur_jeu = (largeur_texture + espacement) * nombre_allumettes - espacement
     
-    jeu = Image.new("RGB", (largeur_jeu, hauteur_texture), (255, 255, 255))
+    jeu = Image.new("RGBA", (largeur_jeu, hauteur_texture), (255, 255,  255, 0))
     for i in range(nombre_allumettes):
         jeu.paste(texture, (i * (largeur_texture + espacement), 0))
-    jeu = jeu.save("Jeu.gif")
+    jeu = jeu.save("Jeu.gif", "GIF", transparency=0)
 
-    wn.addshape('Jeu.gif')
-    tr.shape('Jeu.gif')
+    wn.addshape("Jeu.gif")
+    affichage_jeu.shape("Jeu.gif")
 
 
 def prise_ia(nombre_allumettes, gagnant_dernier):
@@ -73,14 +74,21 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
 def afficher_message_bienvenue():
     """Affiche le message de bienvenue."""
 
-    print("Bienvenue sur le jeu de Nim !") #30 secondes à faire
+    wn.addshape("Message de bienvenue.gif")
+
+    global message
+    message = turtle.Turtle()
+    message.shape("Message de bienvenue.gif")
+    message.penup()
+    message.goto(0, 200)
 
 
 def afficher_message_fin():
     """Affiche le message de fin."""
     
-    print("Votre partie est terminée") #30 secondes à faire
-    #Même 30 secondes c'est un peu long pour ca
+    wn.addshape("Message de fin.gif")
+    message.shape("Message de fin.gif")
+
 
 def reponse_oui_non(question):
     """Pose une question binaire (oui/non) à l'utilisateur qui répond
@@ -131,15 +139,17 @@ def jouer():
     On peut lancer autant d'instances du jeu que l'on souhaite.
     L'utilisateur a le choix de rejouer à chaque fin de partie.
     """
+
+    # affichage de la partie
+    global wn
+    wn = turtle.Screen()
+    wn.setup(0.5, 0.5)
+    global affichage_jeu
+    affichage_jeu = turtle.Turtle()
+    
     afficher_message_bienvenue()
 
     while True:
-        # affichage de la partie
-        global wn
-        wn = turtle.Screen()
-        global tr
-        tr = turtle.Turtle()
-
         # paramètres de la partie
         ia_joueur_2 = reponse_oui_non("Voulez-vous jouer contre la machine ?")
         gagnant_dernier = reponse_oui_non(
@@ -150,7 +160,7 @@ def jouer():
         partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
 
         # on rejoue ?
-        afficher_jeu(nombre_allumettes, Image.open("Encore des Eclaires (sa fait peur).gif"))
+        afficher_jeu(nombre_allumettes)
         if not reponse_oui_non("Voulez-vous rejouer ?"):
             break
 
