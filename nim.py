@@ -21,7 +21,6 @@ def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
         jeu.paste(texture, (i * (largeur_texture + espacement), 0))
     jeu = jeu.save("Jeu.gif")
 
-    tr = turtle.Turtle()
     wn.addshape('Jeu.gif')
     tr.shape('Jeu.gif')
 
@@ -138,14 +137,23 @@ def jouer():
     afficher_message_bienvenue()
 
     while True:
+        # affichage de la partie
+        global wn
+        wn = turtle.Screen()
+        global tr
+        tr = turtle.Turtle()
+
         # paramètres de la partie
         ia_joueur_2 = reponse_oui_non("Voulez-vous jouer contre la machine ?")
         gagnant_dernier = reponse_oui_non(
             "Le gagnant est-il celui qui prend la dernière allumette ?")
         nombre_allumettes = reponse_entier("Avec combien d'allumettes voulez-vous jouer ?", 1, 100)
+
         # lancement de la partie
         partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
+
         # on rejoue ?
+        afficher_jeu(nombre_allumettes)
         if not reponse_oui_non("Voulez-vous rejouer ?"):
             break
 
