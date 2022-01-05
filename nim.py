@@ -94,7 +94,9 @@ def reponse_oui_non(question):
     """
     
     reponse = turtle.textinput("Question", question)
-    if str.lower(reponse) == "o":
+    if reponse is None:
+        return reponse_oui_non(question)
+    elif str.lower(reponse) == "o":
         return True
     elif str.lower(reponse) == "n":
         return False
@@ -117,7 +119,11 @@ def reponse_entier(question, vmin, vmax):
     :rtype: int.
     """
     
-    return int(wn.numinput("Question", question, vmin, minval=vmin, maxval=vmax))
+    nombre = wn.numinput("Question", question, vmin, minval=vmin, maxval=vmax)
+    if nombre is None:
+        return reponse_entier(question, vmin, vmax)
+    else:
+        return int(nombre)
 
 
 def jouer():
@@ -144,7 +150,7 @@ def jouer():
         partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
 
         # on rejoue ?
-        afficher_jeu(nombre_allumettes)
+        afficher_jeu(nombre_allumettes, Image.open("Encore des Eclaires (sa fait peur).gif"))
         if not reponse_oui_non("Voulez-vous rejouer ?"):
             break
 
