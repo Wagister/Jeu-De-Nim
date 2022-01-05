@@ -117,16 +117,7 @@ def reponse_entier(question, vmin, vmax):
     :rtype: int.
     """
     
-    entier = turtle.textinput("Question", question)
-    try:
-        entier = int(entier)
-
-        if entier >= vmin and entier <= vmax:
-            return entier
-        else:
-            return reponse_entier(question, vmin, vmax)
-    except:
-        return reponse_entier(question, vmin, vmax)
+    return int(wn.numinput("Question", question, vmin, minval=vmin, maxval=vmax))
 
 
 def jouer():
