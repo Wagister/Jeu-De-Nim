@@ -130,14 +130,14 @@ def jouer():
 
     while True:
         # paramètres de la partie
-        ia = reponse_oui_non("Jouer contre la machine ?")
+        ia_joueur_2 = reponse_oui_non("Voulez-vous jouer contre la machine ?")
         gagnant_dernier = reponse_oui_non(
-            "Le gagnant est celui qui prend la dernière allumette ?")
-        nombre_allumettes = reponse_entier("Combien d'allumettes ?", 1, 100)
+            "Le gagnant est-il celui qui prend la dernière allumette ?")
+        nombre_allumettes = reponse_entier("Avec combien d'allumettes voulez-vous jouer ?", 1, 100)
         # lancement de la partie
-        partie(nombre_allumettes, gagnant_dernier, ia)
+        partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
         # on rejoue ?
-        if not reponse_oui_non("Rejouer ?"):
+        if not reponse_oui_non("Voulez-vous rejouer ?"):
             break
 
     afficher_message_fin()
