@@ -40,7 +40,7 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :rtype: int.
     """
     
-    if nombre_allumettes <= 4:
+    if nombre_allumettes <= 3:
         #La première parenthèse est prise en compte que si gagnant_dernier est True (Donc égale à 1, sinon la parenthèse est multipliée par 0)
         #Si elle est prise en compte, elle prend toute les allumettes (Donc nombre_allumettes * 1)
         #La seconde est prise en compte si gagnant_dernier est False (Donc égale à 0 mais inversé grâce au "not")
