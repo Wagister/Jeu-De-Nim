@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 from PIL import Image
+from random import randint
 import turtle
 
 
@@ -10,11 +11,10 @@ def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
     :type nombre_allumettes: int.
     :param texture: texture de l'allumette
     :type texture: image object
-    """
-    
+    """    
     espacement = 10
     largeur_texture, hauteur_texture = texture.size
-    largeur_jeu = (largeur_texture + espacement) * nombre_allumettes - espacement
+    largeur_jeu = (largeur_texture + espacement) * (nombre_allumettes + nombre_allumettes == 0) - espacement
     
     jeu = Image.new("RGBA", (largeur_jeu, hauteur_texture), (255, 255,  255, 0))
     for i in range(nombre_allumettes):
@@ -44,13 +44,16 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
         #Si elle est prise en compte, elle prend toute les allumettes (Donc nombre_allumettes * 1)
         #La seconde est prise en compte si gagnant_dernier est False (Donc égale à 0 mais inversé grâce au "not")
         #Si elle est prise en compte elle essayera de laisser 1 allumette (Donc nombre_allumettes - 1)
-        nombre_prendre = (nombre_allumettes * gagnant_dernier) + ((nombre_allumettes - 1) * (not gagnant_dernier)) 
+        nombre_prendre = (nombre_allumettes * gagnant_dernier) + ((nombre_allumettes - 1) * (not gagnant_dernier))
         
         #Empêche de retourner 0 ou 4 (Si nombre_prendre == 0 est True alors sa revient à écrire 1, donc 0 + 1. Idem avec nombre_prendre == 4 sauf qu'on soustrait)
-        return nombre_prendre + (nombre_prendre == 0) - (nombre_prendre == 4)
+        return nombre_prendre + (nombre_prendre <= 0) - (nombre_prendre > 3)
     else:
-        #Insérer du code ici.
-        pass
+        #En gros si l'IA laisse un multiple de 4 (ou un multiple de 4 + 1 selon gagnant_dernier)
+        nombre_prendre = nombre_allumettes % 4 + (not gagnant_dernier)
+        
+        #Et la sa vérifie que le resultat est pas en dessous de 0 ou au dessus de 3, sinon sa prend un nombre aléatoire (Car elle panique)
+        return (nombre_prendre * (nombre_prendre > 0 and nombre_prendre <= 3)) + (randint(1, 3) * (nombre_prendre <= 0 or nombre_prendre > 3))
 
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
