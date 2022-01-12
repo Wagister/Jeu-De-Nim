@@ -168,7 +168,14 @@ def jouer():
 
     afficher_message_fin()
 
+def print_skins():
+    skins_dir = str(os.getcwd()) + "\skins"
     
+    for file in os.listdir(skins_dir):
+        if file.endswith(".gif"):
+            skin = Image.open(os.path.join(skins_dir, file))
+            afficher_jeu(16, skin)
+
 if __name__ == "__main__":
     # si le programme est exécuté directement, on lance une partie
     jouer()
