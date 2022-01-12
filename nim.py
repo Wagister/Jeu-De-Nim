@@ -4,7 +4,7 @@ from random import randint
 import turtle
 
 
-def afficher_jeu(nombre_allumettes, texture=Image.open("Allumette.gif")):
+def afficher_jeu(nombre_allumettes, texture=Image.open(str(os.getcwd()) + "\skins\Allumette.gif")):
     """Affiche le plateau du jeu.
 
     :param nombre_allumettes: doit être positif ou nul.
