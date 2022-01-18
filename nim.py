@@ -1,10 +1,10 @@
 #! /usr/bin/env python3
-from cgitb import text
 from PIL import Image
 from random import randint
+from tkinter import Image as tkImage
 import turtle
-import tkinter
 import os
+
 
 def afficher_jeu(nombre_allumettes, texture=str(os.getcwd()) + "\skins\Allumette.gif"):
     """Affiche le plateau du jeu.
@@ -141,9 +141,9 @@ def jouer():
     global wn
     wn = turtle.Screen()
     wn.title("Jeu de Nim")
-    wn._root.iconphoto(True, tkinter.Image("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
+    wn._root.iconphoto(True, tkImage("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
     wn.setup(0.5, 0.5)
-    
+
     global affichage_jeu
     affichage_jeu = turtle.Turtle()
     
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     global wn
     wn = turtle.Screen()
     wn.title("Jeu de Nim")
-    wn._root.iconphoto(True, tkinter.Image("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
+    wn._root.iconphoto(True, tkImage("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
     wn.setup(0.5, 0.5)
 
     creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", print_bonjour)
