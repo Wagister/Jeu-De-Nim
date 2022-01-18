@@ -1,20 +1,24 @@
 #! /usr/bin/env python3
+from cgitb import text
 from PIL import Image
 from random import randint
 import turtle
+import tkinter
+import os
 
-
-def afficher_jeu(nombre_allumettes, texture=Image.open(str(os.getcwd()) + "\skins\Allumette.gif")):
+def afficher_jeu(nombre_allumettes, texture=str(os.getcwd()) + "\skins\Allumette.gif"):
     """Affiche le plateau du jeu.
 
     :param nombre_allumettes: doit être positif ou nul.
     :type nombre_allumettes: int.
-    :param texture: texture de l'allumette
-    :type texture: image object
-    """    
+    :param texture: chemin de latexture de l'allumette.
+    :type texture: str.
+    """
+    texture = Image.open(texture)
+
     espacement = 10
     largeur_texture, hauteur_texture = texture.size
-    largeur_jeu = (largeur_texture + espacement) * (nombre_allumettes + nombre_allumettes == 0) - espacement
+    largeur_jeu = (largeur_texture + espacement) * nombre_allumettes - espacement
     
     jeu = Image.new("RGBA", (largeur_jeu, hauteur_texture), (255, 255,  255, 0))
     for i in range(nombre_allumettes):
@@ -74,22 +78,13 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
 
 
 def afficher_message_bienvenue():
-    """Affiche le message de bienvenue."""
-
-    wn.addshape("Message de bienvenue.gif")
-
-    global message
-    message = turtle.Turtle()
-    message.shape("Message de bienvenue.gif")
-    message.penup()
-    message.goto(0, 200)
+    # À ne pas faire.
+    pass
 
 
 def afficher_message_fin():
-    """Affiche le message de fin."""
-    
-    wn.addshape("Message de fin.gif")
-    message.shape("Message de fin.gif")
+    # À ne pas faire.
+    pass
 
 
 def reponse_oui_non(question):
@@ -145,7 +140,10 @@ def jouer():
     # affichage de la partie
     global wn
     wn = turtle.Screen()
+    wn.title("Jeu de Nim")
+    wn._root.iconphoto(True, tkinter.Image("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
     wn.setup(0.5, 0.5)
+    
     global affichage_jeu
     affichage_jeu = turtle.Turtle()
     
@@ -168,6 +166,31 @@ def jouer():
 
     afficher_message_fin()
 
+def creer_bouton(x, y, texture, fonction):
+    """ Créer un bouton tout gentil tout mignon.
+    
+    :param x: position x du bouton.
+    :type x: int.
+    :param y: position Y du bouton.
+    :type y: int.
+    :param y: texture du bouton.
+    :type y: str.
+    :param fonction: fonction à executer lors de l'appui.
+    :type fonction: func.
+    """
+    
+    wn.addshape(texture)
+
+    bouton = turtle.Turtle()
+    bouton.shape(texture)
+    bouton.penup()
+    bouton.goto(x, y)
+
+    def click(x, y):
+        fonction()
+
+    bouton.onclick(click, btn=1, add=True)
+    
 def print_skins():
     skins_dir = str(os.getcwd()) + "\skins"
     
@@ -175,7 +198,22 @@ def print_skins():
         if file.endswith(".gif"):
             skin = Image.open(os.path.join(skins_dir, file))
             afficher_jeu(16, skin)
+    
+def print_bonjour():
+    print("Bonjour")
+
 
 if __name__ == "__main__":
     # si le programme est exécuté directement, on lance une partie
-    jouer()
+    global wn
+    wn = turtle.Screen()
+    wn.title("Jeu de Nim")
+    wn._root.iconphoto(True, tkinter.Image("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
+    wn.setup(0.5, 0.5)
+
+    creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", print_bonjour)
+    creer_bouton(0, 4, str(os.getcwd()) + r"\textures\Duo.gif", print_bonjour)
+    creer_bouton(0, -102, str(os.getcwd()) + r"\textures\Casier.gif", print_bonjour)
+    creer_bouton(0, -208, str(os.getcwd()) + r"\textures\Boutique.gif", print_bonjour)
+
+    turtle.mainloop()
