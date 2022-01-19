@@ -75,6 +75,25 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
     """
     # À implémenter.
     pass
+    if ia_joueur_2:
+        premier = reponse_oui_non("Voulez vous jouer en premier ?")
+    else:
+        j1 = str(input("Renseignez le nom du Joueur 1 :"))
+        j2 = str(input("Renseignez le nom du Joueur 2 :"))
+        premier = reponse_oui_non(str(j1+" joue-t-il en premier ?")) #j'ai quand même pris 2 minutes à me rendre compte qu'il fallait un +
+
+    while nombre_allumettes > 1:
+        if ia_joueur_2 and premier:        
+            nbj = reponse_entier("Combien d'allumettes voulez-vous retirer ? 1, 2 ou 3 ?",1,3)
+            nbia = prise_ia(nombre_allumettes, gagnant_dernier)
+        elif premier:
+            nbj1 = reponse_entier("Combien d'allumettes "+j1+" veut retirer ? 1, 2 ou 3 ?",1,3)
+            nbj2 = reponse_entier("Combien d'allumettes "+j2+" veut retirer ? 1, 2 ou 3 ?",1,3)
+        elif ia_joueur_2:
+            nbia = prise_ia(nombre_allumettes, gagnant_dernier)
+            nbj = reponse_entier("Combien d'allumettes voulez-vous retirer ? 1, 2 ou 3 ?",1,3)
+        else:
+            nbj2 = reponse_entier("Combien d'allumettes "+j2+" veut retirer ? 1, 2 ou 3 ?",1,3)
 
 
 def afficher_message_bienvenue():
