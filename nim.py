@@ -73,18 +73,27 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
                   ou l'utilisateur (False).
     :type ia_joueur_2: bool.
     """
-    # À implémenter.
+
     pass
 
 
-def afficher_message_bienvenue():
-    # À ne pas faire.
-    pass
+def lancer_partie(ia_joueur_2):
+    # Pose les questions
+    gagnant_dernier = reponse_oui_non("Le gagnant est-il celui qui prend la dernière allumette ?")
+    nombre_allumettes = reponse_entier("Avec combien d'allumettes voulez-vous jouer ?", 1, 100)
+
+    # Lancement de la partie
+    partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
 
 
-def afficher_message_fin():
-    # À ne pas faire.
-    pass
+def afficher_menu():
+    creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", lancer_partie, (True))
+
+    creer_bouton(0, 4, str(os.getcwd()) + r"\textures\Duo.gif", lancer_partie, (False))
+
+    creer_bouton(0, -102, str(os.getcwd()) + r"\textures\Casier.gif", None, None)
+
+    creer_bouton(0, -208, str(os.getcwd()) + r"\textures\Boutique.gif", None, None)
 
 
 def reponse_oui_non(question):
@@ -147,8 +156,6 @@ def jouer():
     global affichage_jeu
     affichage_jeu = turtle.Turtle()
     
-    afficher_message_bienvenue()
-
     while True:
         # paramètres de la partie
         ia_joueur_2 = reponse_oui_non("Voulez-vous jouer contre la machine ?")
@@ -164,9 +171,8 @@ def jouer():
         if not reponse_oui_non("Voulez-vous rejouer ?"):
             break
 
-    afficher_message_fin()
 
-def creer_bouton(x, y, texture, fonction):
+def creer_bouton(x, y, texture, fonction, args):
     """ Créer un bouton tout gentil tout mignon.
     
     :param x: position x du bouton.
@@ -177,6 +183,8 @@ def creer_bouton(x, y, texture, fonction):
     :type y: str.
     :param fonction: fonction à executer lors de l'appui.
     :type fonction: func.
+    :param args: paramètres de la fonction à executer lors de l'appui.
+    :type fonction: tuple.
     """
     
     wn.addshape(texture)
@@ -187,10 +195,11 @@ def creer_bouton(x, y, texture, fonction):
     bouton.goto(x, y)
 
     def click(x, y):
-        fonction()
+        fonction(args)
 
     bouton.onclick(click, btn=1, add=True)
-    
+
+
 def print_skins():
     skins_dir = str(os.getcwd()) + "\skins"
     
@@ -198,9 +207,6 @@ def print_skins():
         if file.endswith(".gif"):
             skin = Image.open(os.path.join(skins_dir, file))
             afficher_jeu(16, skin)
-    
-def print_bonjour():
-    print("Bonjour")
 
 
 if __name__ == "__main__":
@@ -211,9 +217,6 @@ if __name__ == "__main__":
     wn._root.iconphoto(True, tkImage("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
     wn.setup(0.5, 0.5)
 
-    creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", print_bonjour)
-    creer_bouton(0, 4, str(os.getcwd()) + r"\textures\Duo.gif", print_bonjour)
-    creer_bouton(0, -102, str(os.getcwd()) + r"\textures\Casier.gif", print_bonjour)
-    creer_bouton(0, -208, str(os.getcwd()) + r"\textures\Boutique.gif", print_bonjour)
+    afficher_menu()
 
     turtle.mainloop()
