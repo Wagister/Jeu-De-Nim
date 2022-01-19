@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 from PIL import Image
 from random import randint
+from time import sleep
 from tkinter import Image as tkImage
 import turtle
 import os
@@ -19,7 +20,8 @@ def afficher_jeu(nombre_allumettes, texture=str(os.getcwd()) + "\skins\Allumette
     espacement = 10
     largeur_texture, hauteur_texture = texture.size
     largeur_jeu = (largeur_texture + espacement) * nombre_allumettes - espacement
-    
+    largeur_jeu = largeur_jeu if largeur_jeu > 0 else 1
+
     jeu = Image.new("RGBA", (largeur_jeu, hauteur_texture), (255, 255,  255, 0))
     for i in range(nombre_allumettes):
         jeu.paste(texture, (i * (largeur_texture + espacement), 0))
@@ -43,21 +45,44 @@ def prise_ia(nombre_allumettes, gagnant_dernier):
     :rtype: int.
     """
     
-    if nombre_allumettes <= 3:
-        #La première parenthèse est prise en compte que si gagnant_dernier est True (Donc égale à 1, sinon la parenthèse est multipliée par 0)
-        #Si elle est prise en compte, elle prend toute les allumettes (Donc nombre_allumettes * 1)
-        #La seconde est prise en compte si gagnant_dernier est False (Donc égale à 0 mais inversé grâce au "not")
-        #Si elle est prise en compte elle essayera de laisser 1 allumette (Donc nombre_allumettes - 1)
-        nombre_prendre = (nombre_allumettes * gagnant_dernier) + ((nombre_allumettes - 1) * (not gagnant_dernier))
+    if nombre_allumettes <= 4:
+        if gagnant_dernier:
+            nombre_prendre = 3
+        else:
+            nombre_prendre = nombre_allumettes - 1
         
-        #Empêche de retourner 0 ou 4 (Si nombre_prendre == 0 est True alors sa revient à écrire 1, donc 0 + 1. Idem avec nombre_prendre == 4 sauf qu'on soustrait)
-        return nombre_prendre + (nombre_prendre <= 0) - (nombre_prendre > 3)
+        #Vérifie que le resultat est pas en dessous de 0 ou au dessus de 3, sinon sa prend un nombre aléatoire (Car elle panique)
+        if nombre_prendre < 1 or nombre_prendre > 3:
+            return randint(1, 3)
+        else:
+            return nombre_prendre
     else:
-        #En gros si l'IA laisse un multiple de 4 (ou un multiple de 4 + 1 selon gagnant_dernier)
-        nombre_prendre = nombre_allumettes % 4 + (not gagnant_dernier)
-        
-        #Et la sa vérifie que le resultat est pas en dessous de 0 ou au dessus de 3, sinon sa prend un nombre aléatoire (Car elle panique)
-        return (nombre_prendre * (nombre_prendre > 0 and nombre_prendre <= 3)) + (randint(1, 3) * (nombre_prendre <= 0 or nombre_prendre > 3))
+        nombre_prendre = nombre_allumettes % 4
+
+        #Vérifie que le resultat est pas en dessous de 0 ou au dessus de 3, sinon sa prend un nombre aléatoire (Car elle panique)
+        if nombre_prendre < 1 or nombre_prendre > 3:
+            return randint(1, 3)
+        else:
+            return nombre_prendre
+
+
+def lancer_partie(ia_joueur_2):
+    """Lance une partie du jeu de Nim en solo ou en duo.
+
+    :param ia_joueur_2: indique si le joueur 2 est la machine (True)
+                  ou l'utilisateur (False).
+    :type ia_joueur_2: bool.
+    """
+
+    # Enlève le menu
+    cacher_menu()
+
+    # Pose les questions
+    gagnant_dernier = reponse_oui_non("Le gagnant est-il celui qui prend la dernière allumette ?")
+    nombre_allumettes = reponse_entier("Avec combien d'allumettes voulez-vous jouer ?", 1, 100)
+
+    # Lancement de la partie
+    partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
 
 
 def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
@@ -74,26 +99,115 @@ def partie(nombre_allumettes, gagnant_dernier, ia_joueur_2):
     :type ia_joueur_2: bool.
     """
 
-    pass
+    tour_j1 = reponse_oui_non("Voulez-vous jouer en premier")
+    gagnant = "Personne"
+
+    afficher_jeu(nombre_allumettes)
+    
+    if not tour_j1:
+        if ia_joueur_2:
+            sleep(randint(1, 2))
+            nombre_allumettes -= prise_ia(nombre_allumettes, gagnant_dernier)
+        else:
+            nombre_allumettes -= reponse_entier("Joueur 2 : Combien d'allumettes voulez-vous prendre? ", 1, 3)
+        afficher_jeu(nombre_allumettes)
+
+    while True:
+        #Tour du joueur 1
+        nombre_allumettes -= reponse_entier("Joueur 1 : Combien d'allumettes voulez-vous prendre? ", 1, 3)
+        afficher_jeu(nombre_allumettes)
+        
+        #Vérifie si J1 a gagner
+        if nombre_allumettes <= 0:
+            if gagnant_dernier:
+                gagnant = "Joueur 1"
+            else:
+                gagnant = "Joueur 2" if not ia_joueur_2 else "IA"
+                
+            break
+        
+        #Tour du joueur 2 / de l'IA
+        if ia_joueur_2:
+            sleep(randint(1, 2))
+            nombre_allumettes -= prise_ia(nombre_allumettes, gagnant_dernier)
+        else:
+            nombre_allumettes -= reponse_entier("Joueur 2 : Combien d'allumettes voulez-vous prendre? ", 1, 3)
+        afficher_jeu(nombre_allumettes)
+        
+        #Vérifie si J2 a gagner
+        if nombre_allumettes <= 0:
+            if gagnant_dernier:
+                gagnant = "Joueur 2" if not ia_joueur_2 else "IA"
+            else:
+                gagnant = "Joueur 1"
+            
+            break
+
+    #Affiche le gagnant
+    print(gagnant + " a gagner !")
 
 
-def lancer_partie(ia_joueur_2):
-    # Pose les questions
-    gagnant_dernier = reponse_oui_non("Le gagnant est-il celui qui prend la dernière allumette ?")
-    nombre_allumettes = reponse_entier("Avec combien d'allumettes voulez-vous jouer ?", 1, 100)
+def creer_menu():
+    """Affiche les boutons du menu
+    
+    :returns: liste contenant tout les boutons du menu.
+    :rtype: list.
+    """
+    
+    boutons = []
 
-    # Lancement de la partie
-    partie(nombre_allumettes, gagnant_dernier, ia_joueur_2)
+    solo = creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", lancer_partie, (True))
+    boutons.append(solo)
+    
+    duo = creer_bouton(0, 4, str(os.getcwd()) + r"\textures\Duo.gif", lancer_partie, (False))
+    boutons.append(duo)
+
+    casier = creer_bouton(0, -102, str(os.getcwd()) + r"\textures\Casier.gif", None, None)
+    boutons.append(casier)
+    
+    boutique = creer_bouton(0, -208, str(os.getcwd()) + r"\textures\Boutique.gif", None, None)
+    boutons.append(boutique)
+
+    return boutons
+
+
+def creer_bouton(x, y, texture, fonction, args):
+    """ Créer un bouton tout gentil tout mignon.
+    
+    :param x: position x du bouton.
+    :type x: int.
+    :param y: position Y du bouton.
+    :type y: int.
+    :param y: texture du bouton.
+    :type y: str.
+    :param fonction: fonction à executer lors de l'appui.
+    :type fonction: func.
+    :param args: paramètres de la fonction à executer lors de l'appui.
+    :type fonction: tuple.
+    """
+    
+    wn.addshape(texture)
+
+    bouton = turtle.Turtle()
+    bouton.shape(texture)
+    bouton.penup()
+    bouton.goto(x, y)
+
+    def click(x, y):
+        fonction(args)
+    bouton.onclick(click, btn=1, add=True)
+
+    return bouton
 
 
 def afficher_menu():
-    creer_bouton(0, 110, str(os.getcwd()) + r"\textures\Solo.gif", lancer_partie, (True))
+    for bouton in boutons:
+        bouton.showturtle()
 
-    creer_bouton(0, 4, str(os.getcwd()) + r"\textures\Duo.gif", lancer_partie, (False))
 
-    creer_bouton(0, -102, str(os.getcwd()) + r"\textures\Casier.gif", None, None)
-
-    creer_bouton(0, -208, str(os.getcwd()) + r"\textures\Boutique.gif", None, None)
+def cacher_menu():
+    for bouton in boutons:
+        bouton.hideturtle()
 
 
 def reponse_oui_non(question):
@@ -172,34 +286,6 @@ def jouer():
             break
 
 
-def creer_bouton(x, y, texture, fonction, args):
-    """ Créer un bouton tout gentil tout mignon.
-    
-    :param x: position x du bouton.
-    :type x: int.
-    :param y: position Y du bouton.
-    :type y: int.
-    :param y: texture du bouton.
-    :type y: str.
-    :param fonction: fonction à executer lors de l'appui.
-    :type fonction: func.
-    :param args: paramètres de la fonction à executer lors de l'appui.
-    :type fonction: tuple.
-    """
-    
-    wn.addshape(texture)
-
-    bouton = turtle.Turtle()
-    bouton.shape(texture)
-    bouton.penup()
-    bouton.goto(x, y)
-
-    def click(x, y):
-        fonction(args)
-
-    bouton.onclick(click, btn=1, add=True)
-
-
 def print_skins():
     skins_dir = str(os.getcwd()) + "\skins"
     
@@ -211,12 +297,20 @@ def print_skins():
 
 if __name__ == "__main__":
     # si le programme est exécuté directement, on lance une partie
+
+    # Créer la fenêtre Turtle
     global wn
     wn = turtle.Screen()
     wn.title("Jeu de Nim")
     wn._root.iconphoto(True, tkImage("photo", file=str(os.getcwd()) + r"\textures\Icon.png"))
     wn.setup(0.5, 0.5)
 
-    afficher_menu()
+    # Créer l'affichage du jeu (Là ou son afficger les allumettes)
+    global affichage_jeu
+    affichage_jeu = turtle.Turtle()
+    
+    # Créer le menu
+    global boutons
+    boutons = creer_menu()
 
     turtle.mainloop()
